@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_sudoku_table/sudoku_view_model.dart';
+import 'package:my_sudoku_table/theme/theme.dart';
+import 'package:my_sudoku_table/theme/util.dart';
 import 'package:my_sudoku_table/view/table.dart';
 import 'package:provider/provider.dart';
 
@@ -12,12 +14,15 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = createTextTheme(context, "Roboto", "Abhaya Libre");
+    MaterialTheme theme = MaterialTheme(textTheme);
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => SudokuNotifier()),
         ],
-        child: const MaterialApp(
-          home: Scaffold(
+        child: MaterialApp(
+          theme: theme.light(),
+          home: const Scaffold(
             body: Center(
               child: SudokuTable(),
             ),

@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:my_sudoku_table/sudoku_view_model.dart';
 import 'package:provider/provider.dart';
 
-class Cell extends StatelessWidget {
+class CellView extends StatelessWidget {
   final int index;
   final Border border;
-  const Cell({super.key, required this.index, required this.border});
+  const CellView({super.key, required this.index, required this.border});
+
+  Color cellColor(Cell cell, Cell? selectedCell) {
+    if (cell == selectedCell ||
+        (selectedCell?.value != null && cell.value == selectedCell?.value)) {
+      return Colors.blue.withOpacity(0.5);
+    } else if (cell.rowNumber == selectedCell?.rowNumber ||
+        cell.columnNumber == selectedCell?.columnNumber ||
+        cell.boxNumber == selectedCell?.boxNumber) {
+      return Colors.blue.withOpacity(0.1);
+    } else {
+      return Colors.white;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,47 +26,49 @@ class Cell extends StatelessWidget {
     final cell = vm.cells[index];
 
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         vm.selectCell(cell);
       },
       child: Container(
-          height: 50,
-          width: 50,
-          padding: const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            border: border,
-            color: vm.selectedCell == vm.cells[index]
-                ? Colors.blue.withOpacity(0.4)
-                : Colors.white,
-          ),
-          alignment: Alignment.center,
-                
-          // child: const Center(child: CellText(text: "1")),
-          //sudoku notes
-          child: Builder(builder: (context) {
-            if (cell.value != null) {
-              return CellText(text: cell.value.toString());
-            }
-                
-            return CellNote(notes: cell.notes);
-          })),
+        height: 50,
+        width: 50,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          border: border,
+          color: cellColor(cell, vm.selectedCell),
+        ),
+        child: CellText(cell: cell),
+      ),
     );
   }
 }
 
-//Cell Text
+//CellView Text
 class CellText extends StatelessWidget {
-  final String text;
-  const CellText({super.key, required this.text});
+  final Cell cell;
+  const CellText({super.key, required this.cell});
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
-        style: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.normal,
-        ));
+    return LayoutBuilder(builder: (context, constraints) {
+      final fontSize = constraints.maxHeight * 0.75;
+
+      if (cell.value != null) {
+        return Text(
+          cell.value.toString(),
+          textHeightBehavior: const TextHeightBehavior(
+            applyHeightToFirstAscent: false,
+            applyHeightToLastDescent: false,
+          ),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.w500,
+          ),
+        );
+      }
+      return CellNote(notes: cell.notes);
+    });
   }
 }
 
@@ -113,14 +128,16 @@ class CellNoteText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
-        textHeightBehavior: const TextHeightBehavior(
-          applyHeightToFirstAscent: false,
-          applyHeightToLastDescent: false,
-        ),
-        style: const TextStyle(
-          fontSize: 4,
-          fontWeight: FontWeight.normal,
-        ));
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(text,
+          textHeightBehavior: const TextHeightBehavior(
+            applyHeightToFirstAscent: false,
+            applyHeightToLastDescent: false,
+          ),
+          style: const TextStyle(
+            fontWeight: FontWeight.normal,
+          )),
+    );
   }
 }

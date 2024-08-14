@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:my_sudoku_table/view/cell.dart';
 import 'package:my_sudoku_table/view/settings.dart';
 
-final emptySide = BorderSide(
+const emptySide = BorderSide(
   color: Colors.black,
   width: 0,
 );
-final boldSide = BorderSide(
+const boldSide = BorderSide(
   color: Colors.black,
-  width: 1,
+  width: 4,
 );
 
-final BorderSide thinSide = BorderSide(
+const BorderSide thinSide = BorderSide(
   color: Colors.black,
   width: 0,
 );
@@ -44,26 +44,31 @@ class SudokuTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     //Sudoku table is a 9x9 grid
-    return Row(
-      children: [
-        SizedBox(
-          height: size.height * 0.75,
-          width: size.height * 0.75,
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 9,
+    return SizedBox(
+      height: size.height * 0.75,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: size.height * 0.75,
+            width: size.height * 0.75,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 9,
+              ),
+              itemCount: 81,
+              itemBuilder: (context, index) {
+                return CellView(
+                  index: index,
+                  border: getBorder(index),
+                );
+              },
             ),
-            itemCount: 81,
-            itemBuilder: (context, index) {
-              return Cell(
-                index: index,
-                border: getBorder(index),
-              );
-            },
           ),
-        ),
-        SettingArea()
-      ],
+          const SizedBox(width: 20),
+          const SettingArea()
+        ],
+      ),
     );
   }
 }
