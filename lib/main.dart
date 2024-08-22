@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_sudoku_table/sudoku_view_model.dart';
+import 'package:my_sudoku_table/view_modal/sudoku_view_model.dart';
 import 'package:my_sudoku_table/theme/theme.dart';
 import 'package:my_sudoku_table/theme/util.dart';
 import 'package:my_sudoku_table/view/table.dart';

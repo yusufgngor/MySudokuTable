@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_sudoku_table/sudoku_view_model.dart';
+import 'package:my_sudoku_table/view_modal/sudoku_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SettingArea extends StatelessWidget {

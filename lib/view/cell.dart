@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_sudoku_table/sudoku_view_model.dart';
+import 'package:my_sudoku_table/constant/cells.dart';
+import 'package:my_sudoku_table/models/cell_model.dart';
+import 'package:my_sudoku_table/view_modal/sudoku_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CellView extends StatelessWidget {
@@ -8,6 +10,10 @@ class CellView extends StatelessWidget {
   const CellView({super.key, required this.index, required this.border});
 
   Color cellColor(Cell cell, Cell? selectedCell) {
+    if (cell.error) {
+      return Colors.red.withOpacity(0.5);
+    }
+
     if (cell == selectedCell ||
         (selectedCell?.value != null && cell.value == selectedCell?.value)) {
       return Colors.blue.withOpacity(0.5);
@@ -75,56 +81,26 @@ class CellText extends StatelessWidget {
 class CellNote extends StatelessWidget {
   final List<int> notes;
   const CellNote({super.key, required this.notes});
-  static const _noteTexts = [
-    Align(
-      alignment: Alignment.topLeft,
-      child: CellNoteText(text: "1"),
-    ),
-    Align(
-      alignment: Alignment.topCenter,
-      child: CellNoteText(text: "2"),
-    ),
-    Align(
-      alignment: Alignment.topRight,
-      child: CellNoteText(text: "3"),
-    ),
-    Align(
-      alignment: Alignment.centerLeft,
-      child: CellNoteText(text: "4"),
-    ),
-    Align(
-      alignment: Alignment.center,
-      child: CellNoteText(text: "5"),
-    ),
-    Align(
-      alignment: Alignment.centerRight,
-      child: CellNoteText(text: "6"),
-    ),
-    Align(
-      alignment: Alignment.bottomLeft,
-      child: CellNoteText(text: "7"),
-    ),
-    Align(
-      alignment: Alignment.bottomCenter,
-      child: CellNoteText(text: "8"),
-    ),
-    Align(
-      alignment: Alignment.bottomRight,
-      child: CellNoteText(text: "9"),
-    )
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<SudokuNotifier>(context, listen: true);
+    final selectedCell = vm.selectedCell;
     return Stack(
-      children: notes.map((note) => _noteTexts[note - 1]).toList(),
+      children: notes.map((note) {
+        if (note == selectedCell?.value) {
+          return selectedNotes[note - 1];
+        }
+        return unselectedNotes[note - 1];
+      }).toList(),
     );
   }
 }
 
 class CellNoteText extends StatelessWidget {
   final String text;
-  const CellNoteText({super.key, required this.text});
+  final bool isBold;
+  const CellNoteText({super.key, required this.text, this.isBold = false});
 
   @override
   Widget build(BuildContext context) {
@@ -135,8 +111,9 @@ class CellNoteText extends StatelessWidget {
             applyHeightToFirstAscent: false,
             applyHeightToLastDescent: false,
           ),
-          style: const TextStyle(
-            fontWeight: FontWeight.normal,
+          style: TextStyle(
+            color: isBold ? Colors.blue : Colors.grey,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           )),
     );
   }
