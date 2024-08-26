@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_sudoku_table/view/cell.dart';
 import 'package:my_sudoku_table/view/settings.dart';
+import 'package:my_sudoku_table/view_modal/sudoku_view_model.dart';
+import 'package:provider/provider.dart';
 
 const emptySide = BorderSide(
   color: Colors.black,
@@ -43,6 +45,10 @@ class SudokuTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final vm = Provider.of<SudokuNotifier>(context);
+
+    if (vm.loading) return const CircularProgressIndicator();
+
     //Sudoku table is a 9x9 grid
     return SizedBox(
       height: size.height * 0.75,
