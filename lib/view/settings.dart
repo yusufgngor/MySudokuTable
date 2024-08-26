@@ -13,35 +13,37 @@ class SettingArea extends StatelessWidget {
       width: 200,
       child: Column(
         children: [
-          Row(
+          RowButton(
             children: [
-              Expanded(
-                child: AppButton(
-                    onPressed: () {
-                      vm.toogleInputMode(InputMode.note);
-                    },
-                    text: "Note",
-                    isSelected: vm.inputMode == InputMode.note),
-              ),
-              const SizedBox(height: 5),
-              Expanded(
-                child: AppButton(
-                    onPressed: () {
-                      vm.toogleInputMode(InputMode.value);
-                    },
-                    text: "Value",
-                    isSelected: vm.inputMode == InputMode.value),
-              ),
+              AppButton(
+                  onPressed: () {
+                    vm.toogleInputMode(InputMode.note);
+                  },
+                  text: "Note",
+                  isSelected: vm.inputMode == InputMode.note),
+              AppButton(
+                  onPressed: () {
+                    vm.toogleInputMode(InputMode.value);
+                  },
+                  text: "Value",
+                  isSelected: vm.inputMode == InputMode.value),
             ],
           ),
-          AppButton(
-              onPressed: () {
-                if (vm.selectedCell == null) {
-                  return;
-                }
-                vm.clearCell(vm.selectedCell!);
-              },
-              text: "Clear"),
+          const SizedBox(height: 3),
+          RowButton(
+            children: [
+              AppButton(
+                  onPressed: () {
+                    vm.clearCell(vm.selectedCell);
+                  },
+                  text: "Clear"),
+              AppButton(
+                  onPressed: () {
+                    vm.clearAll();
+                  },
+                  text: "Clear All"),
+            ],
+          )
         ],
       ),
     );
@@ -68,6 +70,31 @@ class AppButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: Text(text));
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 13),
+        ));
+  }
+}
+
+class RowButton extends StatelessWidget {
+  final Iterable<Widget> children;
+
+  const RowButton({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: children
+          .map(
+            (e) => Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(0.8),
+                child: e,
+              ),
+            ),
+          )
+          .toList(),
+    );
   }
 }
