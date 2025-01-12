@@ -17,6 +17,17 @@ class SettingArea extends StatelessWidget {
             children: [
               AppButton(
                   onPressed: () {
+                    vm.undo();
+                  },
+                  text: "Back",
+                  isSelected: vm.inputMode == InputMode.note),
+            ],
+          ),
+          const SizedBox(height: 3),
+          RowButton(
+            children: [
+              AppButton(
+                  onPressed: () {
                     vm.toogleInputMode(InputMode.note);
                   },
                   text: "Note",

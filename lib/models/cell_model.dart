@@ -21,6 +21,7 @@ class Cell {
   }
 
   clear() {
+    error = false;
     value = null;
     notes = [];
   }
@@ -45,4 +46,10 @@ class Cell {
   String toJson() => json.encode(toMap());
 
   factory Cell.fromJson(String source) => Cell.fromMap(json.decode(source));
+
+  copy() {
+    final cell = Cell(index: index, value: value);
+    cell.notes = List<int>.from(notes);
+    return cell;
+  }
 }

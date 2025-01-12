@@ -27,7 +27,7 @@ class SudokuKeyboardListener {
           // 1-9 keys
           case LogicalKeyboardKey.numpad1:
           case LogicalKeyboardKey.digit1:
-            sudokuNotifier.updateCell(selectedCell.index, 1);
+            updateCell(selectedCell.index, 1);
             break;
           case LogicalKeyboardKey.numpad2:
           case LogicalKeyboardKey.digit2:
