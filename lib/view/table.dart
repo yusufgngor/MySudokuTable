@@ -4,6 +4,11 @@ import 'package:my_sudoku_table/view/settings.dart';
 import 'package:my_sudoku_table/view_modal/sudoku_view_model.dart';
 import 'package:provider/provider.dart';
 
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
+import 'dart:ui_web' as ui;
+import 'package:flutter/material.dart';
+
 const emptySide = BorderSide(
   color: Colors.black,
   width: 0,
@@ -42,6 +47,25 @@ Border getBorder(int index) {
 class SudokuTable extends StatelessWidget {
   const SudokuTable({super.key});
 
+  Widget adsenseAdsView() {
+    // ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(
+        'adViewType',
+        (int viewID) => IFrameElement()
+          ..width = '320'
+          ..height = '100'
+          ..src = 'adview.html'
+          ..style.border = 'none');
+
+    return const SizedBox(
+      height: 100.0,
+      width: 320.0,
+      child: HtmlElementView(
+        viewType: 'adViewType',
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -72,7 +96,8 @@ class SudokuTable extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 20),
-          const SettingArea()
+          const SettingArea(),
+          adsenseAdsView(),
         ],
       ),
     );
