@@ -72,7 +72,7 @@ class SudokuTable extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 20),
-          const SettingArea()
+          const SettingArea(),
         ],
       ),
     );
